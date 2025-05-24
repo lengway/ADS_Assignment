@@ -1,31 +1,31 @@
 import java.util.*;
 
-public class BreadthFirstSearch<V> extends Search<V> {
-    public BreadthFirstSearch(WeightedGraph<V> graph) {
-        super(graph);
+public class BreadthFirstSearch<Vertex> extends Search<Vertex> {
+    private final WeightedGraph<Vertex> graph;
+
+    public BreadthFirstSearch(WeightedGraph<Vertex> graph, Vertex source) {
+        super(source);
+        this.graph = graph;
+        BFSearch();
     }
 
-    @Override
-    public void search(Vertex<V> start) {
-        distance.clear();
-        predecessor.clear();
-        Queue<Vertex<V>> queue = new LinkedList<>();
-
-        for (Vertex<V> v : graph.getVertices()) {
-            distance.put(v, Double.POSITIVE_INFINITY);
-        }
-        distance.put(start, 0.0);
-        queue.add(start);
+    public void BFSearch() {
+        Queue<Vertex> queue = new LinkedList<>();
+        queue.add(source);
+        marked.add(source);
 
         while (!queue.isEmpty()) {
-            Vertex<V> u = queue.poll();
-            for (Vertex<V> v : u.getAdjacentVertices().keySet()) {
-                if (distance.get(v).isInfinite()) {
-                    distance.put(v, distance.get(u) + 1);
-                    predecessor.put(v, u);
-                    queue.add(v);
+            Vertex v = queue.poll();
+            for (Edge<Vertex> e : graph.map.get(v)) {
+                Vertex w = e.getDest();
+                if (!marked.contains(w)) {
+                    marked.add(w);
+                    edgeTo.put(w, v);
+                    queue.add(w);
                 }
             }
         }
+
     }
+
 }

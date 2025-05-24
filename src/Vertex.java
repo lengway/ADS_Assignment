@@ -1,9 +1,14 @@
 import java.util.*;
 
 public class Vertex<V> {
-    private final V data;
-    private Map<Vertex<V>, Double> adjacentVertices = new HashMap<>();
-
+    private V data;
+    private Map<Vertex<V>, Double> adjacentVertices;
+    public void addAdjacentVertex(Vertex<V> destination, double weight) {
+        if (adjacentVertices == null) {
+            adjacentVertices = new HashMap<>();
+        }
+        adjacentVertices.put(destination, weight);
+    }
     public Vertex(V data) {
         this.data = data;
     }
@@ -12,16 +17,12 @@ public class Vertex<V> {
         return data;
     }
 
-    public Map<Vertex<V>, Double> getAdjacentVertices() {
-        return adjacentVertices;
-    }
-
-    public void addAdjacentVertex(Vertex<V> destination, double weight) {
-        adjacentVertices.put(destination, weight);
+    public void setData(V data) {
+        this.data = data;
     }
 
     @Override
     public String toString() {
-        return data.toString();
+        return "Vertex{" + "data=" + data + '}';
     }
 }

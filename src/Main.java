@@ -1,28 +1,36 @@
 public class Main {
+
     public static void main(String[] args) {
-        WeightedGraph<String> graph = new WeightedGraph<>();
+        WeightedGraph<String> weightedGraph = new WeightedGraph<>(true);
+        fillWithWeights(weightedGraph);
 
-        Vertex<String> a = graph.addVertex("A");
-        Vertex<String> b = graph.addVertex("B");
-        Vertex<String> c = graph.addVertex("C");
-        Vertex<String> d = graph.addVertex("D");
+        System.out.println("Dijkstra:");
+        Search<String> djk = new DijkstraSearch<>(weightedGraph, "Almaty");
+        outputPath(djk, "Kyzylorda");
 
-        graph.addEdge(a, b, 1.0);
-        graph.addEdge(a, c, 4.0);
-        graph.addEdge(b, c, 2.0);
-        graph.addEdge(b, d, 5.0);
-        graph.addEdge(c, d, 1.0);
 
-        // BFS (unweighted shortest path in hops)
-        BreadthFirstSearch<String> bfs = new BreadthFirstSearch<>(graph);
-        bfs.search(a);
-        System.out.println("BFS distance (in hops) from A to D: " + bfs.getDistance(d));
-        System.out.println("Path: " + bfs.getPath(d));
+        System.out.println("--------------------------------");
 
-        // Dijkstra (weighted shortest path)
-        DijkstraSearch<String> dijkstra = new DijkstraSearch<>(graph);
-        dijkstra.search(a);
-        System.out.println("Dijkstra distance from A to D: " + dijkstra.getDistance(d));
-        System.out.println("Path: " + dijkstra.getPath(d));
+        System.out.println("BFS:");
+        Search<String> bfs = new BreadthFirstSearch<>(weightedGraph, "Almaty");
+        outputPath(bfs, "Kyzylorda");
+    }
+
+    public static void fillWithWeights(WeightedGraph<String> graph) {
+        graph.addEdge("Almaty", "Astana", 2.1);
+        graph.addEdge("Shymkent", "Atyrau", 7.8);
+        graph.addEdge("Atyrau", "Astana", 7.1);
+        graph.addEdge("Almaty", "Shymkent", 7.2);
+        graph.addEdge("Shymkent", "Astana", 3.9);
+        graph.addEdge("Astana", "Kostanay", 3.5);
+        graph.addEdge("Shymkent", "Kyzylorda", 5.4);
+    }
+
+    public static void outputPath(Search<String> search, String key) {
+        for (String v : search.pathTo(key)) {
+            System.out.print(v + " -> ");
+        }
+
+        System.out.println();
     }
 }
